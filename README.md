@@ -1,6 +1,6 @@
 # N-Puzzle
 
-A simple program with GUI to solve an N-Puzzle of size 3x3 using heuristic assisted A* search.
+Take home project for the class CSCI 5511 (Artificial Intelligence) at UMN. A simple program with GUI to solve an N-Puzzle of size 3x3 using heuristic assisted A* search.
 
 ## Background :<br>
 
