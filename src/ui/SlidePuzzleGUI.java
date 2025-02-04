@@ -9,6 +9,8 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Timer;
+import java.util.TimerTask;
 // import java.io.*;
 // import java.lang.Thread;
 // import javax.swing.event.*;
@@ -175,35 +177,26 @@ public class SlidePuzzleGUI extends JPanel implements ItemListener {
     }//end class GraphicsPanel
 
     public class solveAction implements ActionListener {
-        String solutionSequence = "";
-        private int current_position = 0;
+    String solutionSequence = "";
+    private int current_position = 0;
+    Timer timer = new Timer();  // Timer to schedule tasks
 
-        public solveAction(String solutionSequence) {
-            this.solutionSequence = solutionSequence;
-        }
+    public solveAction(String solutionSequence) {
+        this.solutionSequence = solutionSequence;
+    }
 
-        public void actionPerformed(ActionEvent e) {
-                // puzzleGraphics.repaint();
-                // try {
-                //     Thread.sleep(500);
-                // } catch (Exception eee) {
-                //     eee.printStackTrace();
-                // }
-                /* The below print statement executes every time the next move button is clicked. Even after game is solved .*/
-                System.out.println("actionPerformed");
-                // System.out.println("Solved?" + _puzzleModel.isGameOver());
-
-                while (!_puzzleModel.isGameOver()) {
-                    // puzzleGraphics.repaint();
-                    if(current_position >= solutionSequence.length()) {
-                        return;
-                    }
-    
+    public void actionPerformed(ActionEvent e) {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (current_position < solutionSequence.length() && !_puzzleModel.isGameOver()) {
+                    char move = solutionSequence.charAt(current_position);
                     int zero_index_i = -1;
                     int zero_index_j = -1;
-    
-                    for (int i = 2; i >= 0; i--) {
-                        for (int j = 2; j >= 0; j--) {
+
+                    // Find the position of the '0' (empty space)
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
                             if (_puzzleModel._contents[i][j].tileFace.equals("0")) {
                                 zero_index_i = i;
                                 zero_index_j = j;
@@ -211,79 +204,31 @@ public class SlidePuzzleGUI extends JPanel implements ItemListener {
                         }
                     }
 
-                    if(solutionSequence.charAt(current_position) == 'U') {
-                        // _puzzleModel.moveTile(zero_index_i+1, zero_index_j); /* This returns the boolean false. */
-                        System.out.println(_puzzleModel.isGameOver());
-                        try {
-                            _puzzleModel.moveTile(zero_index_i+1, zero_index_j);
-                            // nextMoveButton.doClick();
-                        } catch (Exception ee) {
-                            System.out.println(ee);
-                        }
-                        // System.out.println(_puzzleModel.moveTile(zero_index_i+1, zero_index_j));
-                        // nextMoveButton.addActionListener(new solveAction(solutionSequence));
-                    } else if (solutionSequence.charAt(current_position) == 'D') {
-                        // _puzzleModel.moveTile(zero_index_i-1, zero_index_j); /* This returns the boolean false. */
-                        System.out.println(_puzzleModel.isGameOver());
-                        try {
-                            _puzzleModel.moveTile(zero_index_i-1, zero_index_j);
-                            // puzzleGraphics.repaint(); //Move or repeat this part?
-                            // Thread.kill();
-                            // Thread.sleep(1000);
-                            // nextMoveButton.doClick();
-                        } catch (Exception ee) {
-                            System.out.println("Error : Down");
-                            // ee.printStackTrace();
-                        }
-                        // System.out.println(_puzzleModel.moveTile(zero_index_i+1, zero_index_j));
-                        // nextMoveButton.addActionListener(new solveAction(solutionSequence));
-                    } else if (solutionSequence.charAt(current_position) == 'R') {
-                        // _puzzleModel.moveTile(zero_index_i, zero_index_j-1); /* This returns the boolean false. */
-                        // System.out.println("Current thread" + Thread.currentThread().getId());
-                        System.out.println("Is game over: " +_puzzleModel.isGameOver());
-                        try {
-                            _puzzleModel.moveTile(zero_index_i, zero_index_j-1);
-                            // Thread.sleep(1000);
-                            // nextMoveButton.doClick();
-                        } catch (Exception ee) {
-                            System.out.println("Error : Right");
-                            System.out.println(ee);
-                        }
-                        // System.out.println(_puzzleModel.moveTile(zero_index_i+1, zero_index_j));
-                        // nextMoveButton.addActionListener(new solveAction(solutionSequence));
-                    } else if (solutionSequence.charAt(current_position) == 'L') {
-                        // _puzzleModel.moveTile(zero_index_i, zero_index_j+1); /* This returns the boolean false. */
-                        System.out.println(_puzzleModel.isGameOver());
-                        // System.out.println("Current thread" + Thread.currentThread().getId());
-                        // System.out.println("Sleeping on 1000");
-                        try {
-                            _puzzleModel.moveTile(zero_index_i, zero_index_j+1);
-                            System.out.println("Current thread" + Thread.currentThread().getId());
-                            if (Thread.currentThread().getId() == 22) {
-                                try {
-                                    System.out.println("Thread 22");
-                                }
-                                catch (Exception ee) {
-                                    ee.printStackTrace();
-                                }
-                            }
-                            // Thread.sleep(1000);
-                            // puzzleGraphics.repaint();
-                            // Thread.sleep(1000);
-                            // nextMoveButton.doClick();
-                        } catch (Exception ee) {
-                            System.out.println("Error : Left");
-                            System.out.println(ee);
-                        }
-                        // System.out.println(_puzzleModel.moveTile(zero_index_i+1, zero_index_j));
-                        // nextMoveButton.addActionListener(new solveAction(solutionSequence));
+                    // Perform the move based on the character in the solution sequence
+                    switch (move) {
+                        case 'U':
+                            _puzzleModel.moveTile(zero_index_i + 1, zero_index_j);
+                            break;
+                        case 'D':
+                            _puzzleModel.moveTile(zero_index_i - 1, zero_index_j);
+                            break;
+                        case 'L':
+                            _puzzleModel.moveTile(zero_index_i, zero_index_j + 1);
+                            break;
+                        case 'R':
+                            _puzzleModel.moveTile(zero_index_i, zero_index_j - 1);
+                            break;
                     }
-                    // Thread.sleep(1000);
-                    // puzzleGraphics.repaint(); //Move or repeat this part?
+
+                    puzzleGraphics.repaint();
                     current_position++;
-                    System.out.println("Current Position Is : " + current_position);
+
+                    if (current_position >= solutionSequence.length() || _puzzleModel.isGameOver()) {
+                        timer.cancel(); // Stop the timer if the game is over or all moves have been performed
+                        }
+                    }
                 }
-                puzzleGraphics.repaint();
-            } //Close actionPerformed
-        }//Close inner class
-    }//Close class SlidePuzzleGUI
+            }, 0, 5000); // schedule the task to execute every 5000 milliseconds (5 seconds)
+        }
+    }
+}//Close class SlidePuzzleGUI
