@@ -9,7 +9,7 @@ An N-Puzzle is a childrens game involving a sliding puzzle with n X n boxes (3 x
 <img src="images/PhysicalPuzzle.png" alt="Physical N-Puzzle" width="400">
 
 ## Description
-For this project I created a Graphical User Interface (GUI) to simulate the physical board. The GUI will create a 9-Puzzle (3x3), however its worth nothing that the algorithms contained in “logic” can solve N-Puzzles of arbitrary size, the only drawback being space complexity. In my testing the program could easily solve N-Puzzles of size 3, 8 15, and 24. In order to effectively solve N-Puzzles of size larger then 5x5 (24 puzzle), the algorithm would need to be changed or updated to something like Simplified Memory Bounded A*. The desired goal state/solved state for the GUI is shown below.
+For this project I created a Graphical User Interface (GUI) to simulate the physical board. The GUI will create a 9-Puzzle (3x3), however its worth noting that the algorithms contained in “logic” can solve N-Puzzles of arbitrary size, the only drawback being space complexity. In my testing the program could easily solve N-Puzzles of size 3, 8 15, and 24. In order to effectively solve N-Puzzles of size larger then 5x5 (24 puzzle), the algorithm would need to be changed or updated to something like Simplified Memory Bounded A*. The desired goal state/solved state for the GUI is shown below.
 
 <img src="images/SolvedState.png" alt="A solved N-Puzzle" width="400">
 
